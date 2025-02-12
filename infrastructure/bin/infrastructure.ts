@@ -11,7 +11,7 @@ class MyStaticSite extends Stack {
         region: 'eu-west-1'
       },
       synthesizer: new DefaultStackSynthesizer({
-        qualifier: 'hgajghwxrh' // Change this to something unique
+        qualifier: 'hgajghwxrh'
       })
     });
 
