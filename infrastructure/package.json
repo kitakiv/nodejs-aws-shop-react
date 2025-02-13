@@ -9,8 +9,9 @@
     "watch": "tsc -w",
     "test": "jest",
     "cdk": "cdk",
-    "deploy:infrastructure": "cd infrastructure && cdk deploy",
-    "deploy:full": "npm run build && npm run deploy:infrastructure"
+    "deploy": "cdk deploy",
+    "bootstrap": "cdk bootstrap",
+    "destroy": "cdk destroy CDKToolkit && aws cloudformation delete-stack --stack-name CDKToolkit"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
@@ -23,6 +24,7 @@
   },
   "dependencies": {
     "aws-cdk-lib": "^2.178.1",
-    "constructs": "^10.4.2"
+    "constructs": "^10.4.2",
+    "dotenv": "^16.4.7"
   }
 }

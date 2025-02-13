@@ -1,4 +1,4 @@
-import { Stack, RemovalPolicy, StackProps } from 'aws-cdk-lib';
+import { Stack, RemovalPolicy } from 'aws-cdk-lib';
 import * as s3 from 'aws-cdk-lib/aws-s3';
 import * as s3deploy from 'aws-cdk-lib/aws-s3-deployment';
 import * as cloudfront from 'aws-cdk-lib/aws-cloudfront';
@@ -10,15 +10,14 @@ export class StaticSite extends Construct {
   constructor(parent: Construct, name: string) {
     super(parent, name);
 
-    // Create the S3 bucket
-    const siteBucket = new s3.Bucket(this, 'StaticAite', {
-      bucketName: "nodejs-aws-shop-react-static-site",
+    const siteBucket = new s3.Bucket(this, 'StaticSite', {
+      bucketName: "nodejs-aws-shop-react-site",
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
     });
 
-    const distribution = new cloudfront.Distribution(this, 'JSCC-Distribution', {
+    const distribution = new cloudfront.Distribution(this, 'Distribution', {
       defaultBehavior: {
         origin: new origins.S3Origin(siteBucket, {
           originAccessIdentity: undefined

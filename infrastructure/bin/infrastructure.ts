@@ -1,18 +1,19 @@
 import 'source-map-support/register';
-import { App, Stack, DefaultStackSynthesizer } from 'aws-cdk-lib';
+import { App, DefaultStackSynthesizer, Stack } from 'aws-cdk-lib';
+import * as dotenv from 'dotenv';
 import { StaticSite } from '../lib/infrastructure-stack';
 import { Construct } from 'constructs';
+
+dotenv.config();
 
 class MyStaticSite extends Stack {
   constructor(scope: Construct, id: string) {
     super(scope, id, {
       env: {
-        account: '116981799075',
-        region: 'eu-west-1'
+        account: process.env.AWS_ACCOUNT,
+        region: process.env.AWS_REGION
       },
-      synthesizer: new DefaultStackSynthesizer({
-        qualifier: 'hgajghwxrh'
-      })
+      synthesizer: new DefaultStackSynthesizer()
     });
 
     new StaticSite(this, 'JSCCStaticSite');
@@ -20,5 +21,5 @@ class MyStaticSite extends Stack {
 }
 
 const app = new App();
-new MyStaticSite(app, 'MyFrontendStack');
+new MyStaticSite(app, 'MyFrontend');
 app.synth();
