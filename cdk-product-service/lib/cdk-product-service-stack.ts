@@ -22,7 +22,7 @@ export class CdkProductServiceStack extends cdk.Stack {
     const api = new apigateway.RestApi(this, 'ProductApi', {
       deployOptions: {
         stageName: 'dev'
-      }
+      },
     });
      // GET /products
     const products = api.root.addResource('products');
