@@ -6,9 +6,6 @@ export const handler = async () => {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            data: products,
-            statusCode: 200
-         }),
+        body: JSON.stringify(products),
     };
 };

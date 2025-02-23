@@ -11,7 +11,6 @@ export const handler = async (event: { pathParameters: { id: string } }) => {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                statusCode: 404,
                 message: `Product with id: ${productId} not found`,
             }),
         };
@@ -22,9 +21,6 @@ export const handler = async (event: { pathParameters: { id: string } }) => {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-            data: product,
-            statusCode: 200,
-        }),
+        body: JSON.stringify(product),
     };
 };

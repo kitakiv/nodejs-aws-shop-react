@@ -14,7 +14,7 @@ describe('Products API Tests', () => {
 
       expect(response.statusCode).toBe(200);
       const body = JSON.parse(response.body);
-      const data = body.data;
+      const data = body;
       expect(Array.isArray(data)).toBe(true);
       expect(data[0]).toHaveProperty('id');
       expect(data[0]).toHaveProperty('title');
@@ -39,11 +39,12 @@ describe('Products API Tests', () => {
 
       expect(response.statusCode).toBe(200);
       const body = JSON.parse(response.body);
-      const data = body.data;
+      const data = body;
       expect(data).toHaveProperty('id', firstProduct.id);
       expect(data).toHaveProperty('description', firstProduct.description);
       expect(data).toHaveProperty('title', firstProduct.title);
       expect(data).toHaveProperty('price', firstProduct.price);
+      expect(data).toHaveProperty('count', firstProduct.count);
     });
     test('should return 404 for non-existent product', async () => {
       const event = {

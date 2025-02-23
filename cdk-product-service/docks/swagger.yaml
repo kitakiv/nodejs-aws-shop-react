@@ -19,28 +19,22 @@ paths:
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  statusCode:
-                    type: integer
-                    example: 200
-                  data:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        id:
-                          type: string
-                          example: 7567ec4b-b10c-45c5-9345-fc73c48a80a1
-                        title:
-                          type: string
-                          example: Skirt
-                        description:
-                          type: string
-                          example: Red skirt for office
-                        price:
-                          type: integer
-                          example: 23
+                type: array
+                items:
+                 type: object
+                 properties:
+                   id:
+                     type: string
+                     example: 7567ec4b-b10c-45c5-9345-fc73c48a80a1
+                   title:
+                     type: string
+                     example: Skirt
+                   description:
+                     type: string
+                     example: Red skirt for office
+                   price:
+                     type: integer
+                     example: 23
 
   /products/{id}:
     get:
@@ -60,12 +54,6 @@ paths:
               schema:
                 type: object
                 properties:
-                  statusCode:
-                    type: integer
-                    example: 200
-                  data:
-                    type: object
-                    properties:
                       id:
                         type: string
                         example: 7567ec4b-b10c-45c5-9345-fc73c48a80a1
