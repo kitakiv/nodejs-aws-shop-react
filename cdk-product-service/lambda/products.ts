@@ -1,8 +1,8 @@
 
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import { headers, StatusCode, StatusCodeMessage } from "./request/constans";
+import client from "./middleware/middleware";
 
-const client = new DynamoDBClient({});
 const dynamo = DynamoDBDocumentClient.from(client);
 
 export const handler = async () => {
@@ -29,23 +29,17 @@ export const handler = async () => {
         });
 
         return {
-            statusCode: 200,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
+            statusCode: StatusCode.SUCCESS,
+            headers,
             body: JSON.stringify(combinedItems)
         };
     } catch (error) {
         console.error('Error:', error);
         return {
-            statusCode: 500,
-            headers: {
-                'Content-Type': 'application/json',
-                'Access-Control-Allow-Origin': '*'
-            },
+            statusCode: StatusCode.INTERNAL_SERVER_ERROR,
+            headers,
             body: JSON.stringify({
-                message: 'Internal server error',
+                message: StatusCodeMessage.INTERNAL_SERVER_ERROR,
                 error: error instanceof Error ? error.message : 'Unknown error'
             })
         };

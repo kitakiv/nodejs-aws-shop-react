@@ -1,7 +1,8 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 
-const client = new DynamoDBClient({});
+import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
+import { headers, StatusCode, StatusCodeMessage } from "./request/constans";
+import client from "./middleware/middleware";
+
 const dynamo = DynamoDBDocumentClient.from(client);
 
 export const handler = async (event: { pathParameters: { id: string } }) => {
@@ -25,41 +26,32 @@ export const handler = async (event: { pathParameters: { id: string } }) => {
                     }
                 }))
             ]);
-            if (!resultProduct.Items || !resultStock.Items) {
+            if (!resultProduct.Items?.length || !resultStock.Items?.length) {
                 return {
-                    statusCode: 404,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Access-Control-Allow-Origin': '*'
-                    },
+                    statusCode: StatusCode.NOT_FOUND,
+                    headers,
                     body: JSON.stringify({
-                        message: `Product with id ${productId} not found`
+                        message: StatusCodeMessage.NOT_FOUND
                     })
                 };
             }
             const product = resultProduct.Items;
             const stock = resultStock.Items;
             return {
-                statusCode: 200,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                statusCode: StatusCode.SUCCESS,
+                headers,
                 body: JSON.stringify({
                     ...product[0],
-                    count: stock[0].count || 0
+                    count: stock[0] ? stock[0].count : 0
                 })
             };
         } catch (error) {
             console.error('Error:', error);
             return {
-                statusCode: 500,
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Access-Control-Allow-Origin': '*'
-                },
+                statusCode: StatusCode.INTERNAL_SERVER_ERROR,
+                headers,
                 body: JSON.stringify({
-                    message: 'Internal server error',
+                    message: StatusCodeMessage.INTERNAL_SERVER_ERROR,
                     error: error instanceof Error ? error.message : 'Unknown error'
                 })
             };
