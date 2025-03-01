@@ -14,7 +14,7 @@ enum StatusCode {
 }
 
 enum StatusCodeMessage {
-    BAD_REQUEST = 'Missing required fields example {description: string, title: string, price: number, count: number\n}',
+    BAD_REQUEST = 'Missing required fields example {description: string, title: string, price: number, count: number}',
     NOT_FOUND = 'Product not found',
     INTERNAL_SERVER_ERROR = 'Internal server error',
     CREATED = 'Created',
