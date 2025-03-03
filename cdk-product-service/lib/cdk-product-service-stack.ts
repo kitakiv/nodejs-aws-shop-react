@@ -72,6 +72,10 @@ export class CdkProductServiceStack extends cdk.Stack {
         accessLogDestination: new apigateway.LogGroupLogDestination(apiLogGroup),
         accessLogFormat: apigateway.AccessLogFormat.jsonWithStandardFields()
       },
+      defaultCorsPreflightOptions: {
+        allowOrigins: ['*'],
+        allowMethods: ['GET', 'POST', 'OPTIONS'],
+      }
     });
     api.node.addDependency(apiGatewayAccount);
      // GET /products
