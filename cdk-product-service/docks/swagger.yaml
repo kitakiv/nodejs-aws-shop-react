@@ -10,6 +10,64 @@ servers:
 
 paths:
   /products:
+    post:
+      summary: Create a new product
+      operationId: createProduct
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: Skirt
+                description:
+                  type: string
+                  example: Red skirt for office
+                price:
+                  type: integer
+                  example: 23
+                count:
+                  type: integer
+                  example: 4
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    example: 7567ec4b-b10c-48c5-9345-fc73c48a80aa
+                  title:
+                    type: string
+                    example: Skirt
+                  description:
+                    type: string
+                    example: Red skirt for office
+                  price:
+                    type: integer
+                    example: 23
+                  count:
+                    type: integer
+                    example: 4
+        '400':
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  statusCode:
+                    type: integer
+                    example: 400
+                  message:
+                    type: string
+                    example: Bad request
     get:
       summary: Get all products
       operationId: getProducts
