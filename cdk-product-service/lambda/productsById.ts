@@ -1,11 +1,11 @@
 
 import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { headers, StatusCode, StatusCodeMessage } from "./request/constans";
-import client from "./middleware/middleware";
+import client, {logRequestMiddleware} from "./middleware/middleware";
 
 const dynamo = DynamoDBDocumentClient.from(client);
 
-export const handler = async (event: { pathParameters: { id: string } }) => {
+const handlerBase = async (event: { pathParameters: { id: string } }) => {
     const productId = event.pathParameters?.id;
     try {
             const PRODUCT_TABLE = process.env.PRODUCT_TABLE_NAME;
@@ -57,3 +57,5 @@ export const handler = async (event: { pathParameters: { id: string } }) => {
             };
         }
 };
+
+export const handler = logRequestMiddleware(handlerBase);

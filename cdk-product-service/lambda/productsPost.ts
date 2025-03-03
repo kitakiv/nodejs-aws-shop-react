@@ -5,12 +5,12 @@ import {
 } from "@aws-sdk/lib-dynamodb";
 import { headers, StatusCode, StatusCodeMessage } from "./request/constans";
 import uuid from "./request/uuidId";
-import client from "./middleware/middleware";
+import client, { logRequestMiddleware } from "./middleware/middleware";
 
 const dynamo = DynamoDBDocumentClient.from(client);
 
 
-export const handler = async (event: { body: string }) => {
+const handlerBase = async (event: { body: string }) => {
     const body = JSON.parse(event.body);
     try {
         const PRODUCT_TABLE = process.env.PRODUCT_TABLE_NAME;
@@ -86,3 +86,5 @@ export const handler = async (event: { body: string }) => {
         };
     }
 };
+
+export const handler = logRequestMiddleware(handlerBase);

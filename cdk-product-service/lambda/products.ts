@@ -1,11 +1,11 @@
 
 import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import { headers, StatusCode, StatusCodeMessage } from "./request/constans";
-import client from "./middleware/middleware";
+import client, {logRequestMiddleware} from "./middleware/middleware";
 
 const dynamo = DynamoDBDocumentClient.from(client);
 
-export const handler = async () => {
+const handlerBase = async () => {
     try {
         const PRODUCT_TABLE = process.env.PRODUCT_TABLE_NAME;
         const STOCK_TABLE = process.env.STOCK_TABLE_NAME;
@@ -45,3 +45,5 @@ export const handler = async () => {
         };
     }
 };
+
+export const handler = logRequestMiddleware(handlerBase);

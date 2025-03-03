@@ -3,37 +3,18 @@ import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 
 const client = new DynamoDBClient({});
 
-client.middlewareStack.add(
-  (next, context) => async (args) => {
-    console.log("Incoming DynamoDB request:", {
-      operation: context.commandName,
-      service: context.clientName,
-      args: args.input,
+type LambdaHandler = (event: any, context: any) => Promise<any>;
+
+const logRequestMiddleware = (handler: LambdaHandler): LambdaHandler => {
+  return async (event, context) => {
+    console.log('Lambda request:', {
+      functionName: context.functionName,
+      args: event,
       timestamp: new Date().toISOString()
     });
 
-    try {
-      const result = await next(args);
-      console.log("DynamoDB response:", {
-        operation: context.commandName,
-        success: true,
-        output: result.output
-      });
-
-      return result;
-    } catch (error) {
-      console.error("DynamoDB error:", {
-        operation: context.commandName,
-        error: error instanceof Error ? error.message : 'Unknown error'
-      });
-      throw error;
-    }
-  },
-  {
-    step: "build",
-    name: "request-logger",
-    override: true
-  }
-);
-
+    return handler(event, context);
+  };
+};
 export default client;
+export { logRequestMiddleware };
