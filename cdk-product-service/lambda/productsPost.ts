@@ -1,10 +1,8 @@
 
 import {
     DynamoDBDocumentClient, TransactWriteCommand,
-    TransactWriteCommandInput
 } from "@aws-sdk/lib-dynamodb";
-import { headers, StatusCode, StatusCodeMessage } from "./request/constans";
-import uuid from "./request/uuidId";
+import { headers, StatusCode, StatusCodeMessage, addProductTranscript } from "./request/constans";
 import client, { logRequestMiddleware } from "./middleware/middleware";
 
 const dynamo = DynamoDBDocumentClient.from(client);
@@ -24,48 +22,14 @@ const handlerBase = async (event: { body: string }) => {
                 })
             };
         }
-        const productId = uuid();
-        const paramsProduct = {
-            TableName: PRODUCT_TABLE,
-            Item: {
-                id: `${productId}`,
-                title: body.title,
-                description: body.description,
-                price: body.price
-            }
-        };
-        const paramsStock = {
-            TableName: STOCK_TABLE,
-            Item: {
-                product_id: `${productId}`,
-                count: body.count
-            }
-        };
-        const transactItems: TransactWriteCommandInput = {
-            TransactItems: [
-                {
-                    Put: {
-                        TableName: paramsProduct.TableName,
-                        Item: paramsProduct.Item,
-                        ConditionExpression: 'attribute_not_exists(id)'
-                    }
-                },
-                {
-                    Put: {
-                        TableName: paramsStock.TableName,
-                        Item: paramsStock.Item,
-                        ConditionExpression: 'attribute_not_exists(product_id)'
-                    }
-                }
-            ]
-        };
-        await dynamo.send(new TransactWriteCommand(transactItems));
+        const transactItems = addProductTranscript(body, PRODUCT_TABLE!, STOCK_TABLE!);
+        await dynamo.send(new TransactWriteCommand(transactItems.transactItems));
         return {
             statusCode: StatusCode.CREATED,
             headers,
             body: JSON.stringify(
                 {
-                    id: `${productId}`,
+                    id: transactItems.productId,
                     title: body.title,
                     description: body.description,
                     price: body.price,

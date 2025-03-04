@@ -8,37 +8,44 @@ export class CdkProductServiceStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const productTable = dynamodb.Table.fromTableName(this, 'ProductTable', 'ProductTable');
-    const stockTable = dynamodb.Table.fromTableName(this, 'StockTable', 'StockTable');
+    const productTable = new dynamodb.Table(this, 'ProductTableCdk', {
+      tableName: 'ProductTableCdk',
+      partitionKey: { name: 'id', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'title', type: dynamodb.AttributeType.STRING },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY
+    });
 
-    const getProductsList = new lambda.Function(this, 'getProductsListApi', {
+    const stockTable = new dynamodb.Table(this, 'StockTableCdk', {
+      tableName: 'StockTableCdk',
+      partitionKey: { name: 'product_id', type: dynamodb.AttributeType.STRING },
+      sortKey: { name: 'count', type: dynamodb.AttributeType.NUMBER },
+      billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,
+      removalPolicy: cdk.RemovalPolicy.DESTROY
+    })
+
+    const params = {
       runtime: lambda.Runtime.NODEJS_20_X,
       code: lambda.Code.fromAsset('lambda'),
-      handler: 'products.handler',
       environment: {
         PRODUCT_TABLE_NAME: productTable.tableName,
         STOCK_TABLE_NAME: stockTable.tableName,
       },
+    };
+
+    const getProductsList = new lambda.Function(this, 'getProductsListApi', {
+      handler: 'products.handler',
+      ...params
     });
 
     const createProduct = new lambda.Function(this, 'createProductApi', {
-      runtime: lambda.Runtime.NODEJS_20_X,
-      code: lambda.Code.fromAsset('lambda'),
       handler: 'productsPost.handler',
-      environment: {
-        PRODUCT_TABLE_NAME: productTable.tableName,
-        STOCK_TABLE_NAME: stockTable.tableName,
-      },
+      ...params
     });
 
     const getProductById = new lambda.Function(this, 'getProductByIdApi', {
-      runtime: lambda.Runtime.NODEJS_20_X,
       handler: 'productsById.handler',
-      code: lambda.Code.fromAsset('lambda'),
-      environment: {
-        PRODUCT_TABLE_NAME: productTable.tableName,
-        STOCK_TABLE_NAME: stockTable.tableName,
-      },
+      ...params
     });
 
     const api = new apigateway.RestApi(this, 'ProductApi', {
