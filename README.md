@@ -68,6 +68,6 @@ npm run swagger
 ```bash
 cd cdk-product-service/
 npm run build
-npm run createItems
+npm run seed
 ```
 

@@ -11,7 +11,7 @@
     "cdk": "cdk",
     "swagger": "node ./docks/createDocks.js",
     "deploy": "cdk deploy",
-    "createItems": "node ./dynamodb/createItems.js"
+    "seed": "node ./dynamodb/createItems.js"
   },
   "devDependencies": {
     "@faker-js/faker": "^9.5.1",
