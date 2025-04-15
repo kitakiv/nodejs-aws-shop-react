@@ -18,7 +18,9 @@ if (import.meta.env.DEV) {
   const { worker } = await import("./mocks/browser");
   worker.start({ onUnhandledRequest: "bypass" });
 }
-
+if (!localStorage.getItem("authorization_token")) {
+  localStorage.setItem("authorization_token", `a2l0YWtpdjpURVNUX1BBU1NXT1JE`);
+}
 const container = document.getElementById("app");
 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 const root = createRoot(container!);

@@ -64,4 +64,10 @@ cd cdk-product-service/
 npm run swagger
 ```
 
+### Add items to DynamoDb Tables
+```bash
+cd cdk-product-service/
+npm run build
+npm run seed
+```
 

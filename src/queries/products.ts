@@ -47,13 +47,19 @@ export function useRemoveProductCache() {
 }
 
 export function useUpsertAvailableProduct() {
-  return useMutation((values: AvailableProduct) =>
-    axios.put<AvailableProduct>(`${API_PATHS.bff}/product`, values, {
+  return useMutation((values: AvailableProduct) => {
+    const path = `${API_PATHS.product}/products`;
+    const params = {
       headers: {
         Authorization: `Basic ${localStorage.getItem("authorization_token")}`,
       },
-    })
-  );
+    };
+    if (values.id) {
+      return axios.put(path, values, params);
+    } else {
+      return axios.post(path, values, params);
+    }
+  });
 }
 
 export function useDeleteAvailableProduct() {
