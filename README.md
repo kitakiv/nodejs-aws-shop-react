@@ -36,3 +36,32 @@ Runs tests in console, in browser or with coverage.
 ### `lint`, `prettier`
 
 Runs linting and formatting for all files in `src` folder.
+
+# API Testing Guide
+
+## Unit Tests
+
+### Prerequisites
+- Node.js (v18 or later)
+- npm or yarn package manager
+
+### Test handlers
+1. Install dependencies:
+```bash
+npm install
+```
+2. Cd in cdk and run tests:
+```bash
+cd cdk-product-service/
+npm run test
+```
+
+### Run swagger
+
+1. Cd in cdk and run documentation:
+```bash
+cd cdk-product-service/
+npm run swagger
+```
+
+
